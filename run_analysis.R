@@ -5,13 +5,15 @@ if(!file.exists(dataRoot)) {
   stop("No datasets found")
 }
 
-# Merges the training and the test sets to create one data set.
+## Merges experiments, activities and subjects datasets into single dataset
 mergeData <- function(datasets) {
   activities <- rename(datasets$activities, activity=V1)
   subjects <- rename(datasets$subjects, subject=V1)
   cbind(subjects, activities, datasets$experiments)
 }
 
+
+## Loads experiments, activities and subjects datasets for train or test datasets
 loadDatasets <- function(dataRoot, datasetType) {
   datasetLocation <- paste0(dataRoot, datasetType, "/")
 
@@ -25,16 +27,16 @@ loadDatasets <- function(dataRoot, datasetType) {
   list("experiments" = experiments, "activities" = activities, "subjects" = subjects)
 }
 
+## Load test datasets
 testDatasets <- loadDatasets(dataRoot, "test")
 mergedTestExperiments <- mergeData(testDatasets)
 
+## Load train datasets
 trainDatasets <- loadDatasets(dataRoot, "train")
 mergedTrainExperiments <- mergeData(trainDatasets)
 
+## Combine train and test datasets
 combinedExperiments <- rbind(mergedTrainExperiments, mergedTestExperiments)
-print(dim(combinedExperiments))
-print(head(combinedExperiments, 2))
-print(tail(combinedExperiments, 2))
 
 # Extracts only the measurements on the mean and standard deviation for each measurement.
 # Uses descriptive activity names to name the activities in the data set

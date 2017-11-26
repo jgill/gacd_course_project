@@ -30,9 +30,11 @@ mergedTestExperiments <- mergeData(testDatasets)
 
 trainDatasets <- loadDatasets(dataRoot, "train")
 mergedTrainExperiments <- mergeData(trainDatasets)
-print(dim(mergedTrainExperiments))
-print(head(mergedTrainExperiments, 2))
-print(tail(mergedTrainExperiments, 2))
+
+combinedExperiments <- rbind(mergedTrainExperiments, mergedTestExperiments)
+print(dim(combinedExperiments))
+print(head(combinedExperiments, 2))
+print(tail(combinedExperiments, 2))
 
 # Extracts only the measurements on the mean and standard deviation for each measurement.
 # Uses descriptive activity names to name the activities in the data set

@@ -1,28 +1,39 @@
 library(dplyr)
 
+dataRoot <- "./UCI HAR Dataset/"
+if(!file.exists(dataRoot)) {
+  stop("No datasets found")
+}
+
 # Merges the training and the test sets to create one data set.
-mergeData <- function(subjects, activities, experiments) {
-  activities <- rename(activities, activity=V1)
-  subjects <- rename(subjects, subject=V1)
-  cbind(subjects, activities, experiments)
+mergeData <- function(datasets) {
+  activities <- rename(datasets$activities, activity=V1)
+  subjects <- rename(datasets$subjects, subject=V1)
+  cbind(subjects, activities, datasets$experiments)
 }
 
-dataLocation <- "./UCI HAR Dataset/"
-testDataLocation <- paste0(dataLocation, "test/")
-testXDatasetName <- paste0(testDataLocation, "X_test.txt")
-testActivityDatasetName <- paste0(testDataLocation, "y_test.txt")
-testSubjectDatasetName <- paste0(testDataLocation, "subject_test.txt")
+loadDatasets <- function(dataRoot, datasetType) {
+  datasetLocation <- paste0(dataRoot, datasetType, "/")
 
-if(file.exists(testXDatasetName)) {
-  testExperiments <- read.table(testXDatasetName)
-  testActivities <- read.table(testActivityDatasetName)
-  testSubjects <- read.table(testSubjectDatasetName)
+  experimentsName <- paste0(datasetLocation, "X_", datasetType, ".txt")
+  activitiesName <- paste0(datasetLocation, "y_", datasetType, ".txt")
+  subjectsName <- paste0(datasetLocation, "subject_", datasetType, ".txt")
 
-  mergedTestExperiments <- mergeData(testSubjects, testActivities, testExperiments)
-  print(dim(mergedTestX))
-  print(head(mergedTestX, 2))
-  print(tail(mergedTestX, 2))
+  experiments <- read.table(experimentsName)
+  activities <- read.table(activitiesName)
+  subjects <- read.table(subjectsName)
+  list("experiments" = experiments, "activities" = activities, "subjects" = subjects)
 }
+
+testDatasets <- loadDatasets(dataRoot, "test")
+mergedTestExperiments <- mergeData(testDatasets)
+
+trainDatasets <- loadDatasets(dataRoot, "train")
+mergedTrainExperiments <- mergeData(trainDatasets)
+print(dim(mergedTrainExperiments))
+print(head(mergedTrainExperiments, 2))
+print(tail(mergedTrainExperiments, 2))
+
 # Extracts only the measurements on the mean and standard deviation for each measurement.
 # Uses descriptive activity names to name the activities in the data set
 # Appropriately labels the data set with descriptive variable names.

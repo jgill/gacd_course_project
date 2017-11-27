@@ -6,6 +6,7 @@ made to features available in the original dataset:
 
 ### Variables
 subject - identifies the subject who performed the activity for each window sample. Its range is from 1 to 30.
+
 activity - descriptive activity name
 
 Each mean and standard variable has been cleaned from it's orginal form to a one without `-` or `()`. E.g.

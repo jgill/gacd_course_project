@@ -6,6 +6,7 @@ if(!file.exists(dataRoot)) {
 }
 
 source('datasets.R')
+## 1. Merges the training and the test sets to create one data set.
 ## Load test datasets
 testDatasets <- loadDatasets(dataRoot, "test")
 mergedTestExperiments <- mergeData(testDatasets)
@@ -17,7 +18,7 @@ mergedTrainExperiments <- mergeData(trainDatasets)
 ## Combine train and test datasets
 combinedExperiments <- rbind(mergedTrainExperiments, mergedTestExperiments)
 
-# Extracts only the measurements on the mean and standard deviation for each measurement.
+## 2. Extracts only the measurements on the mean and standard deviation for each measurement.
 source('features.R')
 features <- loadFeatures(dataRoot)
 features <- rename(features, index = V1, name = V2)
@@ -27,13 +28,13 @@ meanStdFeatures <- withCleanName(meanStdFeatures)
 
 meanStdMeasurements <- select(combinedExperiments, c("subject", "activity", meanStdFeatures$VIndex))
 
-# Uses descriptive activity names to name the activities in the data set
+## 3. Uses descriptive activity names to name the activities in the data set
 source('activities.R')
 activities <- loadActivities(dataRoot)
 activities <- renameVariables(activities)
 meanStdMeasurements$activity <- sapply(meanStdMeasurements$activity, function(x) retrieveActivity(activities, x))
 
-# Appropriately labels the data set with descriptive variable names.
+## 4. Appropriately labels the data set with descriptive variable names.
 vcol <- grepl("^V", colnames(meanStdMeasurements))
 colnames(meanStdMeasurements)[vcol] <- as.character(meanStdFeatures$cleanName)
 

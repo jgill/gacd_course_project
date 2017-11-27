@@ -26,12 +26,12 @@ cd gacd_course_project
 
 Download project dataset from http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones.
 ```
-curl https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip > UCI_DAR_Dataset.zip
+curl https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip > UCI_HAR_Dataset.zip
 ```
 
 Unzip project dataset
 ```
-unzip UCI_DAR_Dataset.zip
+unzip UCI_HAR_Dataset.zip
 ```
 
 Execute the analysis script

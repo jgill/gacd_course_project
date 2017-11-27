@@ -23,6 +23,7 @@ features <- loadFeatures(dataRoot)
 features <- rename(features, index = V1, name = V2)
 featuresWithVIndex <- withVIndex(features)
 meanStdFeatures <- nameMatching(featuresWithVIndex, "mean\\(\\)|std\\(\\)")
+meanStdFeatures <- withCleanName(meanStdFeatures)
 
 meanStdMeasurements <- select(combinedExperiments, c("subject", "activity", meanStdFeatures$VIndex))
 
@@ -34,7 +35,7 @@ meanStdMeasurements$activity <- sapply(meanStdMeasurements$activity, function(x)
 
 # Appropriately labels the data set with descriptive variable names.
 vcol <- grepl("^V", colnames(meanStdMeasurements))
-colnames(meanStdMeasurements)[vcol] <- as.character(meanStdFeatures$name)
+colnames(meanStdMeasurements)[vcol] <- as.character(meanStdFeatures$cleanName)
 
 print(head(meanStdMeasurements, 2))
 print(tail(meanStdMeasurements, 2))

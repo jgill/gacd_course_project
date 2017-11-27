@@ -20,6 +20,10 @@ as.VIndex <- function(features) {
   sapply(features$index, function(x){ paste0("V", x) } )
 }
 
+withCleanName <- function(features) {
+  mutate(features, cleanName = gsub("-|\\(|\\)|,", "", features$name))
+}
+
 ## Adds a VIndex column to our dataset
 withVIndex <- function(features) {
   mutate(features, VIndex = as.VIndex(features))

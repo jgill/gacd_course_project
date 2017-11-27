@@ -29,6 +29,12 @@ print(dim(meanStdMeasurements))
 head(meanStdMeasurements, 2)
 
 # Uses descriptive activity names to name the activities in the data set
+source('activities.R')
+activities <- loadActivities(dataRoot)
+activities <- renameVariables(activities)
+meanStdMeasurements$activity <- sapply(meanStdMeasurements$activity, function(x) retrieveActivity(activities, x))
+print(head(meanStdMeasurements, 2))
+print(tail(meanStdMeasurements, 2))
 # Appropriately labels the data set with descriptive variable names.
 # From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 

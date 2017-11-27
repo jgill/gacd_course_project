@@ -37,8 +37,15 @@ meanStdMeasurements$activity <- sapply(meanStdMeasurements$activity, function(x)
 vcol <- grepl("^V", colnames(meanStdMeasurements))
 colnames(meanStdMeasurements)[vcol] <- as.character(meanStdFeatures$cleanName)
 
-print(head(meanStdMeasurements, 2))
-print(tail(meanStdMeasurements, 2))
+## 5. From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+## Group by subject and activity
+subjectActivities <- group_by(meanStdMeasurements, subject, activity)
 
-# From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+## Dynamically generate mean columns from feature names
+vars <- sapply(meanStdFeatures$cleanName, function(x) { quo(mean(!!as.name(x))) })
 
+## Summarize mean variables for each subject and activity
+meanVarBySubjectActivity <- summarize(subjectActivities, !!! vars)
+
+## Write new tidy dataset to text file
+write.table(meanVarBySubjectActivity, "./meanVarBySubjectActivity.txt", row.name=FALSE)

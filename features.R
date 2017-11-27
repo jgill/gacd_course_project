@@ -19,3 +19,8 @@ nameMatching <- function(features, regex="mean\\(\\)|std\\(\\)") {
 as.VIndex <- function(features) {
   sapply(features$index, function(x){ paste0("V", x) } )
 }
+
+## Adds a VIndex column to our dataset
+withVIndex <- function(features) {
+  mutate(features, VIndex = as.VIndex(features))
+}

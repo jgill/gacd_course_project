@@ -21,20 +21,23 @@ combinedExperiments <- rbind(mergedTrainExperiments, mergedTestExperiments)
 source('features.R')
 features <- loadFeatures(dataRoot)
 features <- rename(features, index = V1, name = V2)
-meanStdFeatures <- nameMatching(features, "mean\\(\\)|std\\(\\)")
-featuresVIndex <- as.VIndex(meanStdFeatures)
+featuresWithVIndex <- withVIndex(features)
+meanStdFeatures <- nameMatching(featuresWithVIndex, "mean\\(\\)|std\\(\\)")
 
-meanStdMeasurements <- select(combinedExperiments, c("subject", "activity", featuresVIndex))
-print(dim(meanStdMeasurements))
-head(meanStdMeasurements, 2)
+meanStdMeasurements <- select(combinedExperiments, c("subject", "activity", meanStdFeatures$VIndex))
 
 # Uses descriptive activity names to name the activities in the data set
 source('activities.R')
 activities <- loadActivities(dataRoot)
 activities <- renameVariables(activities)
 meanStdMeasurements$activity <- sapply(meanStdMeasurements$activity, function(x) retrieveActivity(activities, x))
+
+# Appropriately labels the data set with descriptive variable names.
+vcol <- grepl("^V", colnames(meanStdMeasurements))
+colnames(meanStdMeasurements)[vcol] <- as.character(meanStdFeatures$name)
+
 print(head(meanStdMeasurements, 2))
 print(tail(meanStdMeasurements, 2))
-# Appropriately labels the data set with descriptive variable names.
+
 # From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 
